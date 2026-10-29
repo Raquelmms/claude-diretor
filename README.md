@@ -8,7 +8,9 @@ Transforma o Claude Code num diretor de vídeo. Você grava um vídeo falando pa
 4. te mostra o plano para você aprovar ou mudar;
 5. entrega o MP4 vertical pronto para Reels, TikTok e Shorts, com legenda palavra por palavra.
 
-Os efeitos são feitos em código com [Remotion](https://www.remotion.dev): telas girando em 3D atrás de você, vídeo dentro do texto, widgets de vidro, freeze frame com ranking, curtidas subindo, folha de contato, tela dividida com o Claude, checklist, gráfico de comparação e chamada final.
+Os efeitos são feitos em código com [Remotion](https://www.remotion.dev): letreiro de neon acendendo atrás da sua cabeça, letras gigantes atrás de você, telas girando em 3D, vídeo dentro do texto, widgets de vidro, freeze frame com ranking, curtidas subindo, folha de contato, tela dividida com o Claude, checklist, gráfico de comparação e chamada final.
+
+Cada vídeo pode ter um tema (padrão, neon, limpo, editorial ou retro), que troca as fontes e as cores de todos os efeitos, e um estilo de legenda. Os efeitos sonoros (pop, whoosh, ding, clique, zumbido de neon) entram sozinhos no tempo certo. Eles foram gerados por código neste repositório, então não têm direitos de terceiros.
 
 ## O que você precisa
 

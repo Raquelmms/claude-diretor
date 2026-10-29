@@ -16,3 +16,5 @@ remotion/src/dados/plano.json
 *.MOV
 *.mp4
 *.wav
+# Efeitos sonoros sintetizados por scripts/gerar_sons.py (originais, podem subir)
+!remotion/public/sons/*.wav

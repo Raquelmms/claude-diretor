@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Freeze, Img, staticFile, useCurrentFrame, interpolate, spring, Easing} from 'remotion';
-import {ANTON, HAND, UI, MONO, FPS, F, COR, CL, lerp, recorte, quadro, Base, Clip, Still, usePop, Pop} from '../comum';
+import {TITULO, MAO, UI, MONO, FPS, F, COR, CL, lerp, recorte, quadro, TEMA, Base, Clip, Still, usePop, Pop} from '../comum';
 import info from '../dados/info.json';
 
 /* ------------------------------------------------------------------ */
@@ -64,7 +64,7 @@ export const TextoVideo: React.FC<TextoVideoProps> = ({inicio, fim, linha1, linh
   const p1 = usePop(0), p2 = usePop(linha2Em !== undefined ? linha2Em - inicio : 0.5);
   const maior = Math.max(linha1.length, (linha2 ?? '').length);
   const tam = Math.min(330, 2000 / Math.max(4, maior));
-  const palavra = (p: number): React.CSSProperties => ({fontFamily: ANTON, fontSize: tam, lineHeight: 0.86, color: '#fff',
+  const palavra = (p: number): React.CSSProperties => ({fontFamily: TITULO, fontSize: tam, lineHeight: 0.86, color: '#fff',
     textTransform: 'uppercase', opacity: Math.min(1, p * 2), transform: `scale(${0.6 + 0.4 * p})`});
   return (
     <AbsoluteFill style={{isolation: 'isolate'}}>
@@ -90,7 +90,7 @@ const Polaroid: React.FC<{k: number; label: string; rank: string; rankAt: number
       padding: `${18 * k}px ${18 * k}px ${76 * k}px`, boxShadow: `0 30px 80px rgba(0,0,0,${0.7 * k})`}}>
       <div style={{position: 'relative', width: '100%', height: '100%', overflow: 'hidden', borderRadius: 6}}>{children}</div>
       <div style={{position: 'absolute', left: 26, bottom: 18, fontFamily: UI, fontWeight: 800, fontSize: 34, color: '#222', opacity: k, whiteSpace: 'nowrap'}}>{label}</div>
-      <div style={{position: 'absolute', top: -40, left: -30, fontFamily: ANTON, fontSize: 100, lineHeight: 1, color: '#fff', background: COR.vermelho,
+      <div style={{position: 'absolute', top: -40, left: -30, fontFamily: TITULO, fontSize: 100, lineHeight: 1, color: '#fff', background: COR.vermelho,
         padding: '6px 24px', borderRadius: 20, opacity: Math.min(1, p * 2), transform: `rotate(-8deg) scale(${0.5 + 0.5 * p})`}}>{rank}</div>
     </div>
   );
@@ -108,7 +108,7 @@ export const FreezeRanking: React.FC<FreezeRankingProps> = ({inicio, titulo = 'T
     <AbsoluteFill style={{background: '#000'}}>
       <Freeze frame={0}><Clip from={from} style={{filter: 'blur(24px) brightness(.35) saturate(.6)', transform: 'scale(1.2)'}} /></Freeze>
       <Pop at={0.3} style={{left: 650, top: 300}}>
-        <div style={{fontFamily: ANTON, fontSize: 92, lineHeight: 0.95, color: '#fff', textTransform: 'uppercase', maxWidth: 260}}>{titulo}</div>
+        <div style={{fontFamily: TITULO, fontSize: 92, lineHeight: 0.95, color: '#fff', textTransform: 'uppercase', maxWidth: 300, textShadow: TEMA.sombraTitulo}}>{titulo}</div>
       </Pop>
       <div style={{position: 'absolute', left: 120 + (1 - s3) * -700, top: 1000, width: 390, height: 490, transform: 'rotate(-3deg)'}}>
         <Polaroid k={1} label={itens[2]} rank="#3" rankAt={1.0}><Still frame={outro(0.7)} /></Polaroid>
@@ -158,7 +158,7 @@ export const FolhaContato: React.FC<FolhaContatoProps> = ({inicio, fim, texto = 
           pathLength={1} strokeDasharray={1} strokeDashoffset={1 - risco} transform={`rotate(-6 ${c.x + c.w / 2} ${c.y + c.h / 2})`} />
       </svg>
       <Pop at={0.88} rot={-10} style={{left: 650, top: 470}}>
-        <div style={{fontFamily: HAND, fontWeight: 700, fontSize: 150, color: COR.vermelho}}>{texto}</div>
+        <div style={{fontFamily: MAO, fontWeight: 700, fontSize: 150, color: COR.vermelho}}>{texto}</div>
       </Pop>
       {k > 0 && (
         <div style={{position: 'absolute', overflow: 'hidden', left: lerp(c.x + 10, 0, k), top: lerp(c.y + 10, 0, k),

@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate, spring} from 'remotion';
-import {ANTON, UI, MONO, FPS, F, COR, CL, Base, Clip, Still, Pop} from '../comum';
+import {TITULO, UI, MONO, FPS, F, COR, CL, Base, Clip, Still, Pop, TEMA} from '../comum';
 
 /* ------------------------------------------------------------------ */
 /* split-claude: em cima o Claude recebendo o comando, embaixo a pessoa */
@@ -79,8 +79,8 @@ export const Cta: React.FC<CtaProps> = ({inicio, linhas}) => {
         top += e.size + 50;
         return (
           <Pop key={i} at={l.em !== undefined ? l.em - inicio : i * 0.3} style={{left: 70, top: y}}>
-            <div style={{fontFamily: ANTON, fontSize: e.size, lineHeight: 1, background: e.bg, color: e.fg, padding: '14px 30px', borderRadius: 22,
-              textTransform: 'uppercase', whiteSpace: 'nowrap'}}>{l.texto}</div>
+            <div style={{fontFamily: TITULO, fontSize: e.size, lineHeight: 1, background: e.bg, color: e.fg, padding: '14px 30px', borderRadius: 22,
+              textTransform: 'uppercase', whiteSpace: 'nowrap', boxShadow: TEMA.vidro.brilho === 'none' ? undefined : TEMA.vidro.brilho}}>{l.texto}</div>
           </Pop>
         );
       })}

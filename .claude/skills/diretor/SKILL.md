@@ -41,12 +41,34 @@ O script corta as pausas, tira tomadas repetidas (quando a pessoa começa a fras
 
 Leia `palavras.json` e escreva `remotion/src/dados/plano.json`. Veja `plano.exemplo.json` como modelo.
 
+No topo do plano ficam as escolhas de estilo do vídeo inteiro:
+
+```json
+{"tema": "neon", "estiloLegenda": "neon", "sons": true, "legenda": true, "efeitos": [...]}
+```
+
 Cada efeito tem `tipo`, `inicio` e `fim` (segundos no vídeo cortado) e os parâmetros dele. Todo tempo nos parâmetros (`em`, `linha2Em` etc.) também é em segundos do vídeo, não relativo ao efeito.
+
+### Tema, legenda e sons
+
+Escolha pelo tom do vídeo e pelo que a pessoa pediu:
+
+| tema | Fontes e cores | Combina com |
+|---|---|---|
+| `padrao` | Anton + Figtree, laranja e amarelo, vidro escuro | tutorial, tecnologia, dica rápida |
+| `neon` | Tilt Neon + Sora, magenta e ciano com brilho | noite, games, música, tom divertido |
+| `limpo` | Archivo Black + Manrope, azul, vidro claro | negócios, educação, conteúdo sério |
+| `editorial` | Playfair itálico + Manrope, vermelho e creme | moda, beleza, lifestyle, storytelling |
+| `retro` | Bungee + Space Grotesk, laranja e amarelo, cantos retos | humor, nostalgia, lista divertida |
+
+Cada tema já traz um estilo de legenda. Para trocar só a legenda, use `estiloLegenda`: `forte` (letra grossa com destaque amarelo), `neon` (letras brilhando), `editorial` (serifa itálica com marca-texto), `manuscrito` (letra de marcador) ou `minimo` (pequena e limpa).
+
+Os efeitos sonoros (pop, whoosh, ding, clique de câmera, zumbido de neon, teclado) entram sozinhos no tempo de cada efeito, abaixo da voz. Use `"sons": false` se a pessoa for pôr música e não quiser sons. Os arquivos ficam em `remotion/public/sons/` e são gerados por `scripts/gerar_sons.py` (se sumirem, rode de novo).
 
 ### Como escolher
 
 - **Ancore cada efeito numa palavra.** `inicio` é o tempo `s` da palavra que dispara o efeito. `fim` é o início do próximo efeito menos 0,04 s. Os tempos internos (itens do checklist, barras do gráfico) também vão no `s` da palavra correspondente.
-- **Abra com um gancho** nos primeiros 2 a 3 segundos: `orbita` ou `texto-video`.
+- **Abra com um gancho** nos primeiros 2 a 3 segundos: `orbita`, `neon` ou `texto-video`.
 - **Leia o sentido da frase** e use a tabela abaixo. Uma frase sem efeito óbvio fica só com o vídeo e a legenda, e está tudo bem.
 - **Não repita o mesmo efeito em seguida** e não passe de uns 6 segundos num efeito só.
 - **Não invente fatos.** Números, nomes e textos dos efeitos saem do que a pessoa falou. Quando ela não deu o dado, use um texto neutro ou deixe o padrão, e avise no plano.
@@ -57,6 +79,8 @@ Cada efeito tem `tipo`, `inicio` e `fim` (segundos no vídeo cortado) e os parâ
 
 | tipo | Quando usar | Parâmetros |
 |---|---|---|
+| `neon` | Abertura ou o nome do assunto ("isso aqui é o Claude"). Um letreiro de neon acende piscando ATRÁS da cabeça da pessoa, com zumbido. Pede o recorte. Texto curto, de 3 a 10 letras. | `texto`, `fonte` (tubo, script ou retro), `cor`, `y` (altura do meio do texto em px de 1920, padrão 560) |
+| `texto-atras` | Palavra de impacto ("ZERO EDITOR", "GRÁTIS"). Letras gigantes atrás da cabeça, uma palavra por linha. Pede o recorte. | `texto`, `estilo` (solido ou contorno), `cor`, `y` |
 | `orbita` | Gancho de abertura e final em loop. Telas girando em 3D em volta da pessoa, passando atrás dela. Pede o recorte (passo 3). | `imagens` (opcional, ver passo 3) |
 | `texto-video` | Frase curta de impacto ("zero editor", "sem código"). O vídeo aparece dentro de letras gigantes, que crescem e viram o vídeo. Até ~6 letras por linha. | `linha1`, `linha2`, `linha2Em` |
 | `widgets` | A pessoa apresenta o que fez ou fala de rotina e produtividade. Oito widgets de vidro estilo iPhone em volta dela. | `em` (4 tempos), `numero` {rotulo, valor, legenda}, `grafico` {rotulo, valor}, `contador` {valor, botao}, `perfil` {nome, legenda}, `musica` {rotulo, titulo}, `progresso`, `anel`, `selo` |
@@ -74,13 +98,13 @@ Os efeitos já ficam longe do rosto e dentro da área segura do Reels. A legenda
 
 Antes de renderizar, mostre o plano para a pessoa numa tabela: tempo, a frase falada, o efeito e os textos que vão aparecer. Aponte qualquer texto que você teve de supor. **Espere ela aprovar ou pedir mudanças.** Não renderize antes disso.
 
-## 3. Recorte (só se o plano tem `orbita`)
+## 3. Recorte (só se o plano tem `orbita`, `neon` ou `texto-atras`)
 
 ```bash
 .venv/bin/python scripts/recortar.py
 ```
 
-Ele recorta a pessoa do fundo nos trechos da órbita. Na primeira vez baixa um modelo de ~170 MB, e cada segundo de vídeo leva alguns segundos para processar.
+Ele recorta a pessoa do fundo nesses trechos. Na primeira vez baixa um modelo de ~170 MB, e cada segundo de vídeo leva alguns segundos para processar.
 
 Opcional, mas fica muito melhor: faça as telas da órbita mostrarem os outros efeitos do próprio vídeo, como uma prévia. Depois do plano aprovado, gere miniaturas de frames no meio de outros efeitos (nunca de frames da órbita) e liste em `imagens`:
 

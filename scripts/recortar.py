@@ -13,7 +13,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 REMOTION = RAIZ / 'remotion'
-PRECISAM = {'orbita'}
+PRECISAM = {'orbita', 'neon', 'texto-atras'}
 
 
 def main():

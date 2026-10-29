@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate, spring, Easing} from 'remotion';
-import {ANTON, UI, MONO, FPS, F, COR, CL, Base, Still, usePop, Glass, Coracao, Check} from '../comum';
+import {TITULO, UI, MONO, FPS, F, COR, CL, Base, Still, usePop, Glass, Coracao, Check, vidro, TEMA} from '../comum';
 
 /* ------------------------------------------------------------------ */
 /* widgets: vários widgets de vidro estilo iPhone em volta da pessoa    */
@@ -33,12 +33,12 @@ export const Widgets: React.FC<WidgetsProps> = ({inicio, fim, em, numero = {rotu
     <AbsoluteFill>
       <Glass at={a0} i={0} style={{left: 40, top: 250, width: 300, ...pad}}>
         <div style={lbl}>{numero.rotulo}</div>
-        <div style={{fontFamily: ANTON, fontSize: 120, lineHeight: 1}}>{Math.round(interpolate(t, [a0, a0 + 0.5], [0, numero.valor], CL))}</div>
+        <div style={{fontFamily: TITULO, fontSize: 120, lineHeight: 1}}>{Math.round(interpolate(t, [a0, a0 + 0.5], [0, numero.valor], CL))}</div>
         <div style={{fontFamily: UI, fontWeight: 600, fontSize: 26, opacity: 0.85}}>{numero.legenda}</div>
       </Glass>
       <Glass at={a1} i={1} style={{left: 40, top: 505, width: 300, ...pad}}>
         <div style={lbl}>{grafico.rotulo}</div>
-        <div style={{fontFamily: ANTON, fontSize: 56, lineHeight: 1.1, color: COR.destaque}}>{grafico.valor}</div>
+        <div style={{fontFamily: TITULO, fontSize: 56, lineHeight: 1.1, color: COR.destaque}}>{grafico.valor}</div>
         <div style={{display: 'flex', alignItems: 'flex-end', gap: 8, height: 90, marginTop: 6}}>
           {[1, 0.72, 0.6, 0.45, 0.33, 0.25].map((h, i) => (
             <div key={i} style={{flex: 1, borderRadius: 4, background: i ? COR.destaque : COR.amarelo,
@@ -47,7 +47,7 @@ export const Widgets: React.FC<WidgetsProps> = ({inicio, fim, em, numero = {rotu
         </div>
       </Glass>
       <Glass at={a2} i={2} style={{left: 40, top: 790, width: 300, ...pad}}>
-        <div style={{fontFamily: ANTON, fontSize: 84, lineHeight: 1}}>{contador.valor}</div>
+        <div style={{fontFamily: TITULO, fontSize: 84, lineHeight: 1}}>{contador.valor}</div>
         <div style={{display: 'inline-block', marginTop: 8, fontFamily: UI, fontWeight: 800, fontSize: 24, background: COR.vermelho, padding: '6px 14px', borderRadius: 12}}>{contador.botao}</div>
       </Glass>
       <Glass at={a0} i={3} style={{left: 740, top: 250, width: 300, ...pad}}>
@@ -84,7 +84,7 @@ export const Widgets: React.FC<WidgetsProps> = ({inicio, fim, em, numero = {rotu
           <circle cx={20} cy={20} r={16} fill="none" stroke="rgba(255,255,255,.3)" strokeWidth={4.5} />
           <circle cx={20} cy={20} r={16} fill="none" stroke={COR.verde} strokeWidth={4.5} strokeLinecap="round" pathLength={1}
             strokeDasharray={1} strokeDashoffset={1 - ring} transform="rotate(-90 20 20)" />
-          <text x={20} y={24} textAnchor="middle" fill="#fff" style={{fontFamily: ANTON, fontSize: 11}}>{anel}</text>
+          <text x={20} y={24} textAnchor="middle" fill="#fff" style={{fontFamily: TITULO, fontSize: 11}}>{anel}</text>
         </svg>
         <div style={lbl}>render</div>
       </Glass>
@@ -119,7 +119,7 @@ export const Likes: React.FC<LikesProps> = ({numero = 12.4, sufixo = 'mil',
       })}
       <Glass at={0} style={{left: 60, top: 250, display: 'flex', alignItems: 'center', gap: 22}}>
         <Coracao size={84} color={COR.vermelho} />
-        <div style={{fontFamily: ANTON, fontSize: 104, lineHeight: 1, fontVariantNumeric: 'tabular-nums'}}>{n.toFixed(casas).replace('.', ',')} {sufixo}</div>
+        <div style={{fontFamily: TITULO, fontSize: 104, lineHeight: 1, fontVariantNumeric: 'tabular-nums'}}>{n.toFixed(casas).replace('.', ',')} {sufixo}</div>
       </Glass>
       {comentarios.slice(0, 2).map((c, i) => (
         <Glass key={i} at={0.35 + i * 0.35} i={i + 1} style={{left: 60, top: 1080 + i * 190, width: 620}}>
@@ -172,7 +172,7 @@ export const Checklist: React.FC<ChecklistProps> = ({inicio, fim, titulo = 'Clau
       </Glass>
       {fechamento && (
         <div style={{position: 'absolute', left: 60, top: 1060 + 120 + itens.length * 76 + 70, opacity: Math.min(1, ok * 2), transform: `scale(${0.6 + 0.4 * ok})`,
-          transformOrigin: 'left center', fontFamily: ANTON, fontSize: 64, lineHeight: 1, background: COR.amarelo, color: '#111', padding: '14px 28px', borderRadius: 20}}>
+          transformOrigin: 'left center', fontFamily: TITULO, fontSize: 64, lineHeight: 1, background: COR.amarelo, color: '#111', padding: '14px 28px', borderRadius: 20}}>
           {fechamento}
         </div>
       )}
@@ -200,18 +200,17 @@ export const Grafico: React.FC<GraficoProps> = ({inicio, titulo = 'Comparação'
       <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: UI, fontWeight: 800, fontSize: 38, opacity: mostrar ? 1 : 0.35}}>
         <span>{rotulo}</span><span style={{color: cor}}>{mostrar ? valor : ''}</span>
       </div>
-      <div style={{height: 34, borderRadius: 20, background: '#ffffff30', marginTop: 10, overflow: 'hidden'}}>
+      <div style={{height: 34, borderRadius: 20, background: 'rgba(127,127,127,.25)', marginTop: 10, overflow: 'hidden'}}>
         <div style={{width: `${w}%`, height: '100%', borderRadius: 20, background: cor}} />
       </div>
     </div>
   );
   return (
     <AbsoluteFill>
-      <div style={{position: 'absolute', left: 66, top: 1080, width: 760, padding: 40, borderRadius: 50, color: '#fff',
-        background: 'rgba(28,26,34,.42)', backdropFilter: 'blur(26px) saturate(1.5)', border: '2px solid rgba(255,255,255,.35)',
-        boxShadow: '0 30px 70px #0006, inset 0 2px 0 #ffffff66', opacity: Math.min(1, card * 2), transform: `scale(${0.7 + 0.3 * card})`}}>
+      <div style={{position: 'absolute', left: 66, top: 1080, width: 760, padding: 40, ...vidro(),
+        opacity: Math.min(1, card * 2), transform: `scale(${0.7 + 0.3 * card})`}}>
         <div style={{fontFamily: UI, fontWeight: 800, fontSize: 30, letterSpacing: '0.14em', opacity: 0.85, textTransform: 'uppercase'}}>{titulo}</div>
-        {linha(antes.rotulo, antes.valor, b1, '#ffffffdd', t >= g0)}
+        {linha(antes.rotulo, antes.valor, b1, TEMA.vidro.texto, t >= g0)}
         {linha(depois.rotulo, depois.valor, b2, COR.amarelo, t >= g1)}
       </div>
     </AbsoluteFill>
