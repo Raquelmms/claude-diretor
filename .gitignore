@@ -1,0 +1,18 @@
+# Dependências
+node_modules/
+.venv/
+
+# Vídeos e arquivos gerados a partir do vídeo de quem usa (nunca sobem)
+entrada/
+saida/
+trabalho/
+remotion/public/base.mp4
+remotion/public/recorte/
+remotion/public/miniaturas/
+remotion/src/dados/palavras.json
+remotion/src/dados/info.json
+remotion/src/dados/plano.json
+*.mov
+*.MOV
+*.mp4
+*.wav

@@ -1,0 +1,27 @@
+{
+  "legenda": true,
+  "efeitos": [
+    {"tipo": "orbita", "inicio": 0, "fim": 2.4},
+    {"tipo": "texto-video", "inicio": 2.4, "fim": 4.1, "linha1": "ZERO", "linha2": "EDITOR", "linha2Em": 3.3},
+    {"tipo": "widgets", "inicio": 4.1, "fim": 6.2, "em": [4.2, 4.7, 5.2, 5.4],
+      "numero": {"rotulo": "Claude", "valor": 9, "legenda": "efeitos · 1 clipe"}, "selo": "Editado pelo Claude"},
+    {"tipo": "freeze-ranking", "inicio": 6.26, "fim": 7.72, "titulo": "TOP 3 EFEITOS", "itens": ["Freeze frame", "Glass likes", "Folha de contato"]},
+    {"tipo": "likes", "inicio": 7.76, "fim": 9.26},
+    {"tipo": "folha-contato", "inicio": 9.3, "fim": 10.92},
+    {"tipo": "split-claude", "inicio": 10.96, "fim": 16.45, "comando": "/diretor", "anexoEm": 12.06, "digitaEm": 13.36, "enviaEm": 15.2, "prontoEm": 15.8},
+    {"tipo": "checklist", "inicio": 16.5, "fim": 22.25, "prontoEm": 20.78, "itens": [
+      {"texto": "Cortar as pausas", "tag": "todo frame", "em": 16.72},
+      {"texto": "Pôr legenda", "tag": "auto", "em": 18.32},
+      {"texto": "Aplicar o efeito", "tag": "IA", "em": 19.46}
+    ]},
+    {"tipo": "grafico", "inicio": 22.3, "fim": 25.33, "titulo": "Tempo de edição",
+      "antes": {"rotulo": "Antes", "valor": "2 h", "em": 22.9},
+      "depois": {"rotulo": "Agora", "valor": "10 min", "em": 24.34, "proporcao": 0.083}},
+    {"tipo": "cta", "inicio": 25.38, "fim": 28.33, "linhas": [
+      {"texto": "Comenta", "em": 25.38},
+      {"texto": "DIRETOR", "em": 25.8},
+      {"texto": "e recebe o link", "em": 26.5}
+    ]},
+    {"tipo": "orbita", "inicio": 27.33, "fim": 28.33}
+  ]
+}
