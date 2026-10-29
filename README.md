@@ -22,7 +22,7 @@ Os efeitos são feitos em código com [Remotion](https://www.remotion.dev): tela
 1. Baixe este repositório e abra o Claude Code dentro da pasta:
 
    ```bash
-   git clone https://github.com/SEU-USUARIO/claude-diretor.git
+   git clone https://github.com/Raquelmms/claude-diretor.git
    cd claude-diretor
    claude
    ```
