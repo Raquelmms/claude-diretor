@@ -1,17 +1,19 @@
 ---
 name: diretor
-description: Edita um vídeo falado para a câmera (Reels, TikTok, Shorts) como um diretor de vídeo. Corta pausas e tomadas repetidas, transcreve, escolhe um efeito para cada frase, mostra o plano para aprovação e renderiza o MP4 vertical. Use quando a pessoa digitar /diretor, mandar um vídeo bruto para editar ou pedir efeitos num vídeo.
+description: Edits a talking-head video (Reels, TikTok, Shorts) like a video director. Cuts pauses and repeated takes, transcribes, picks an effect for each sentence, shows the plan for approval and renders the vertical MP4. Use when the person types /diretor, sends a raw video to edit, or asks for effects on a video.
 ---
 
-# Diretor de vídeo
+# Video director
 
-Você recebe um vídeo bruto de alguém falando para a câmera e entrega um MP4 vertical (1080x1920) editado, com legenda palavra por palavra e efeitos que entram na palavra certa. Você decide os efeitos, mas a pessoa aprova o plano antes de renderizar.
+You get a raw video of someone talking to the camera and deliver an edited vertical MP4 (1080x1920) with word-by-word captions, sound effects and effects that land on the right word. You pick the effects; the person approves the plan before you render.
 
-Todos os caminhos abaixo são relativos à raiz deste repositório.
+**Talk to the person in their own language** (the one they write in). Every text that shows up in the video must be in the language spoken in the video.
 
-## 0. Primeira vez: instalar
+All paths below are relative to the root of this repository. If the person pasted the repository link in another folder, clone it first (or download the ZIP if git is missing) and work inside it.
 
-Confira se já está tudo instalado antes de rodar qualquer coisa:
+## 0. First time: install
+
+Check what is already installed before running anything:
 
 ```bash
 ffmpeg -version | head -1 && node -v && python3 --version
@@ -19,120 +21,122 @@ test -d .venv || (python3 -m venv .venv && .venv/bin/pip install -r requirements
 test -d remotion/node_modules || (cd remotion && npm install)
 ```
 
-Se faltar ffmpeg, Node 18+ ou Python 3.10+, explique à pessoa como instalar no sistema dela e pare. Não instale nada no sistema sem ela pedir.
+If ffmpeg, Node 18+ or Python 3.10+ is missing, explain to the person how to install it on their system, step by step, and ask before installing anything.
 
-## 1. Preparar o vídeo
+## 1. Prepare the video
 
-1. O vídeo vai em `entrada/`. Se a pessoa anexou ou indicou outro caminho, copie para lá.
-2. Pergunte só se ela quer a cor **natural** (padrão) ou **viva**. Não pergunte mais nada agora.
-3. Rode:
+1. The video goes in `input/`. If the person attached it or gave another path, copy it there.
+2. Ask only one thing: **natural** color (default) or **vivid**.
+3. Run:
 
 ```bash
-.venv/bin/python scripts/preparar.py entrada/NOME-DO-VIDEO --filtro natural --glossario "Claude"
+.venv/bin/python scripts/prepare.py input/VIDEO-NAME --filter natural --glossary "Claude"
 ```
 
-Ponha no `--glossario` nomes próprios e termos que a pessoa fala (marcas, ferramentas, o próprio nome), separados por vírgula. O Whisper erra menos com eles.
+Put in `--glossary` the proper names and terms the person says (brands, tools, their own name), comma separated. Whisper gets them wrong less often. The language is detected automatically; use `--language pt` (or `en`, `es`…) to force it.
 
-O script corta as pausas, tira tomadas repetidas (quando a pessoa começa a frase, para e recomeça), gera `remotion/public/base.mp4` e grava a fala com o tempo de cada palavra em `remotion/src/dados/palavras.json`. No fim ele imprime a fala no formato `palavra@segundos`.
+The script cuts pauses, removes repeated takes (when the person starts a sentence, stops and starts again), writes `remotion/public/base.mp4`, and saves the speech with the time of each word in `remotion/src/data/words.json`. At the end it prints the speech as `word@seconds`.
 
-4. Leia a transcrição. Se alguma palavra saiu errada (nome de marca, termo técnico), corrija só o texto `w` em `palavras.json` e mantenha os tempos. Se o script avisou que removeu uma tomada repetida, conte isso à pessoa.
+4. Read the transcript. If a word came out wrong (brand name, technical term), fix only its `w` text in `words.json` and keep the times. If the script reported a removed repeated take, tell the person.
 
-## 2. Dirigir: montar o plano
+## 2. Direct: write the plan
 
-Leia `palavras.json` e escreva `remotion/src/dados/plano.json`. Veja `plano.exemplo.json` como modelo.
+Read `words.json` and write `remotion/src/data/plan.json`. Use `plan.example.json` as a model.
 
-No topo do plano ficam as escolhas de estilo do vídeo inteiro:
+The top of the plan holds the style choices for the whole video:
 
 ```json
-{"tema": "neon", "estiloLegenda": "neon", "sons": true, "legenda": true, "efeitos": [...]}
+{"theme": "neon", "captionStyle": "neon", "sounds": true, "captions": true, "effects": [...]}
 ```
 
-Cada efeito tem `tipo`, `inicio` e `fim` (segundos no vídeo cortado) e os parâmetros dele. Todo tempo nos parâmetros (`em`, `linha2Em` etc.) também é em segundos do vídeo, não relativo ao efeito.
+Every effect has `type`, `start` and `end` (seconds in the cut video) and its own parameters. Every time inside the parameters (`at`, `line2At` etc.) is also in seconds of the video, not relative to the effect.
 
-### Tema, legenda e sons
+### Theme, captions and sounds
 
-Escolha pelo tom do vídeo e pelo que a pessoa pediu:
+Pick from the tone of the video and what the person asked for:
 
-| tema | Fontes e cores | Combina com |
+| theme | Fonts and colors | Fits |
 |---|---|---|
-| `padrao` | Anton + Figtree, laranja e amarelo, vidro escuro | tutorial, tecnologia, dica rápida |
-| `neon` | Tilt Neon + Sora, magenta e ciano com brilho | noite, games, música, tom divertido |
-| `limpo` | Archivo Black + Manrope, azul, vidro claro | negócios, educação, conteúdo sério |
-| `editorial` | Playfair itálico + Manrope, vermelho e creme | moda, beleza, lifestyle, storytelling |
-| `retro` | Bungee + Space Grotesk, laranja e amarelo, cantos retos | humor, nostalgia, lista divertida |
+| `default` | Anton + Figtree, orange and yellow, dark glass | tutorial, tech, quick tip |
+| `neon` | Tilt Neon + Sora, glowing magenta and cyan | night, games, music, playful tone |
+| `clean` | Archivo Black + Manrope, blue, light glass | business, education, serious content |
+| `editorial` | Playfair italic + Manrope, red and cream | fashion, beauty, lifestyle, storytelling |
+| `retro` | Bungee + Space Grotesk, orange and yellow, square corners | humor, nostalgia, fun lists |
 
-Cada tema já traz um estilo de legenda. Para trocar só a legenda, use `estiloLegenda`: `forte` (letra grossa com destaque amarelo), `neon` (letras brilhando), `editorial` (serifa itálica com marca-texto), `manuscrito` (letra de marcador) ou `minimo` (pequena e limpa).
+Each theme comes with a caption style. To change only the captions, set `captionStyle`: `bold` (thick letters, yellow highlight), `neon` (glowing letters), `editorial` (italic serif with a highlighter), `marker` (marker pen) or `minimal` (small and clean).
 
-Os efeitos sonoros (pop, whoosh, ding, clique de câmera, zumbido de neon, teclado) entram sozinhos no tempo de cada efeito, abaixo da voz. Use `"sons": false` se a pessoa for pôr música e não quiser sons. Os arquivos ficam em `remotion/public/sons/` e são gerados por `scripts/gerar_sons.py` (se sumirem, rode de novo).
+Sound effects (pop, whoosh, ding, camera click, neon hum, keyboard) are added automatically at each effect's times, below the voice. Set `"sounds": false` if the person will add music and doesn't want them. The files live in `remotion/public/sounds/` and come from `scripts/generate_sounds.py` (run it again if they are missing).
 
-### Como escolher
+### How to choose
 
-- **Ancore cada efeito numa palavra.** `inicio` é o tempo `s` da palavra que dispara o efeito. `fim` é o início do próximo efeito menos 0,04 s. Os tempos internos (itens do checklist, barras do gráfico) também vão no `s` da palavra correspondente.
-- **Abra com um gancho** nos primeiros 2 a 3 segundos: `orbita`, `neon` ou `texto-video`.
-- **Leia o sentido da frase** e use a tabela abaixo. Uma frase sem efeito óbvio fica só com o vídeo e a legenda, e está tudo bem.
-- **Não repita o mesmo efeito em seguida** e não passe de uns 6 segundos num efeito só.
-- **Não invente fatos.** Números, nomes e textos dos efeitos saem do que a pessoa falou. Quando ela não deu o dado, use um texto neutro ou deixe o padrão, e avise no plano.
-- **Feche com `cta`** quando a pessoa pede ação ("comenta", "segue", "salva", "manda pra alguém"). A palavra pedida (ex.: o que ela manda comentar) vai na linha de `estilo: "destaque"`.
-- Se a pessoa fala "tipo esse", "olha isso", "esse aqui", ela está mostrando algo: use um efeito visual forte ali (`freeze-ranking`, `likes`, `folha-contato`).
+- **Anchor every effect on a word.** `start` is the `s` time of the word that triggers it. `end` is the next effect's start minus 0.04 s. Inner times (checklist items, chart bars) also go on the `s` of the matching word.
+- **Open with a hook** in the first 2–3 seconds: `orbit`, `neon` or `text-mask`.
+- **Read what each sentence means** and use the table below. A sentence with no obvious effect stays with plain video and captions, and that is fine.
+- **Don't repeat the same effect back to back** and don't go past about 6 seconds on one effect.
+- **Don't make up facts.** Numbers, names and texts come from what the person said. When they didn't give it, use neutral text and say so in the plan.
+- **Close with `cta`** when the person asks for an action ("comment", "follow", "save", "send it to someone"). The word they ask for goes on the line with `style: "accent"`.
+- When the person says "like this one", "look at this", "this here", they are showing something: use a strong visual effect there (`freeze-ranking`, `likes`, `contact-sheet`).
 
-### Catálogo
+### Catalog
 
-| tipo | Quando usar | Parâmetros |
+| type | When to use | Parameters |
 |---|---|---|
-| `neon` | Abertura ou o nome do assunto ("isso aqui é o Claude"). Um letreiro de neon acende piscando ATRÁS da cabeça da pessoa, com zumbido. Pede o recorte. Texto curto, de 3 a 10 letras. | `texto`, `fonte` (tubo, script ou retro), `cor`, `y` (altura do meio do texto em px de 1920, padrão 560) |
-| `texto-atras` | Palavra de impacto ("ZERO EDITOR", "GRÁTIS"). Letras gigantes atrás da cabeça, uma palavra por linha. Pede o recorte. | `texto`, `estilo` (solido ou contorno), `cor`, `y` |
-| `orbita` | Gancho de abertura e final em loop. Telas girando em 3D em volta da pessoa, passando atrás dela. Pede o recorte (passo 3). | `imagens` (opcional, ver passo 3) |
-| `texto-video` | Frase curta de impacto ("zero editor", "sem código"). O vídeo aparece dentro de letras gigantes, que crescem e viram o vídeo. Até ~6 letras por linha. | `linha1`, `linha2`, `linha2Em` |
-| `widgets` | A pessoa apresenta o que fez ou fala de rotina e produtividade. Oito widgets de vidro estilo iPhone em volta dela. | `em` (4 tempos), `numero` {rotulo, valor, legenda}, `grafico` {rotulo, valor}, `contador` {valor, botao}, `perfil` {nome, legenda}, `musica` {rotulo, titulo}, `progresso`, `anel`, `selo` |
-| `freeze-ranking` | "Tipo esse", "o melhor é", rankings, top 3. Flash, o vídeo congela e vira foto com #1, #2 e #3. | `titulo`, `itens` (3 textos) |
-| `likes` | Viralizar, engajamento, reação do público. Curtidas subindo, corações e comentários de vidro. | `numero`, `sufixo`, `comentarios` [{usuario, texto}] |
-| `folha-contato` | Escolher, comparar versões, "e esse". Nove versões do vídeo, uma caneta circula a escolhida e ela dá zoom. | `texto` |
-| `split-claude` | A pessoa explica como usa o Claude ou mostra o comando. Em cima, o Claude recebendo o comando; embaixo, a pessoa. | `comando`, `anexoEm`, `digitaEm`, `enviaEm`, `prontoEm`, `editando`, `pronto` |
-| `checklist` | A pessoa lista passos ou coisas feitas ("corta, põe legenda, coloca efeito"). Cada item é marcado na hora em que ela fala. | `titulo`, `tituloPronto`, `itens` [{texto, tag, em}], `prontoEm`, `fechamento` |
-| `grafico` | Comparação com números ("levava 2 horas, agora 10 minutos"). | `titulo`, `antes` {rotulo, valor, em}, `depois` {rotulo, valor, em, proporcao} |
-| `cta` | Chamada final. | `linhas` [{texto, em, estilo: branco, destaque ou amarelo}] |
+| `neon` | Opening, or naming the subject ("this is Claude"). A neon sign flickers on BEHIND the person's head, with a hum. Needs the cutout. Short text, 3 to 10 letters. | `text`, `font` (tube, script or retro), `color`, `y` (vertical center of the text in px of 1920, default 560) |
+| `text-behind` | Impact word ("ZERO EDITOR", "FREE"). Giant letters behind the head, one word per line. Needs the cutout. | `text`, `style` (solid or outline), `color`, `y` |
+| `orbit` | Opening hook and looping ending. Screens spinning in 3D around the person, passing behind them. Needs the cutout. | `images` (optional, see step 3) |
+| `text-mask` | Short punchy sentence ("zero editor", "no code"). The video shows only inside giant letters that grow until they become the video. Up to ~6 letters per line. | `line1`, `line2`, `line2At` |
+| `widgets` | The person presents what they made, or talks about routine and productivity. Eight iPhone-style glass widgets around them. | `at` (4 times), `number` {label, value, caption}, `chart` {label, value}, `counter` {value, button}, `profile` {name, caption}, `music` {label, title}, `progress`, `ring`, `badge` |
+| `freeze-ranking` | "Like this one", "the best one is", rankings, top 3. Flash, the video freezes and becomes a photo with #1, #2 and #3. | `title`, `items` (3 texts) |
+| `likes` | Going viral, engagement, audience reaction. Likes counting up, hearts and glass comments. | `count`, `suffix`, `comments` [{user, text}] |
+| `contact-sheet` | Choosing, comparing versions, "and this one". Nine versions of the video, a pen circles the chosen one and it zooms in. | `text` |
+| `split-claude` | The person explains how they use Claude or shows the command. Claude receiving the command on top, the person below. | `command`, `attachAt`, `typeAt`, `sendAt`, `doneAt`, `working`, `done` |
+| `checklist` | The person lists steps or things done ("cut, add captions, add the effect"). Each item ticks when they say it. | `title`, `doneTitle`, `items` [{text, tag, at}], `doneAt`, `closing` |
+| `chart` | Comparison with numbers ("it took 2 hours, now 10 minutes"). | `title`, `before` {label, value, at}, `after` {label, value, at, ratio} |
+| `cta` | Closing call to action. | `lines` [{text, at, style: white, accent or yellow}] |
 
-Os efeitos já ficam longe do rosto e dentro da área segura do Reels. A legenda some durante os efeitos (menos no `split-claude`, onde sobe para a metade de cima) e volta no vídeo puro.
+The effects already stay clear of the face and inside the Reels safe area. Captions hide during effects (except `split-claude`, where they move to the top half, and `neon` / `text-behind`) and come back on plain video.
 
-### Mostrar o plano e esperar
+Most effects have English default texts. **Always pass the visible texts** (`title`, `items`, `closing`, `badge`, `working`, `done`, `comments`…) in the language of the video.
 
-Antes de renderizar, mostre o plano para a pessoa numa tabela: tempo, a frase falada, o efeito e os textos que vão aparecer. Aponte qualquer texto que você teve de supor. **Espere ela aprovar ou pedir mudanças.** Não renderize antes disso.
+### Show the plan and wait
 
-## 3. Recorte (só se o plano tem `orbita`, `neon` ou `texto-atras`)
+Before rendering, show the plan to the person as a table: time, the spoken sentence, the effect and the texts that will appear, plus the theme and caption style. Point out any text you had to assume. **Wait for them to approve or ask for changes.** Don't render before that.
 
-```bash
-.venv/bin/python scripts/recortar.py
-```
-
-Ele recorta a pessoa do fundo nesses trechos. Na primeira vez baixa um modelo de ~170 MB, e cada segundo de vídeo leva alguns segundos para processar.
-
-Opcional, mas fica muito melhor: faça as telas da órbita mostrarem os outros efeitos do próprio vídeo, como uma prévia. Depois do plano aprovado, gere miniaturas de frames no meio de outros efeitos (nunca de frames da órbita) e liste em `imagens`:
+## 3. Cutout (only if the plan has `orbit`, `neon` or `text-behind`)
 
 ```bash
-cd remotion && mkdir -p public/miniaturas
-npx remotion still Diretor public/miniaturas/1.png --frame=FRAME --scale=0.3
+.venv/bin/python scripts/cutout.py
 ```
 
-`FRAME` é segundos × 30. Gere de 6 a 8 miniaturas e ponha `"imagens": ["miniaturas/1.png", ...]` em cada `orbita`.
+It cuts the person out of the background in those ranges. The first time it downloads a ~170 MB model, and each second of video takes a few seconds to process.
 
-## 4. Conferir antes de renderizar tudo
-
-Renderize alguns quadros soltos, um no meio de cada efeito, e olhe as imagens:
+Optional, but much better: make the orbit screens show the video's other effects, like a preview. After the plan is approved, render thumbnails of frames in the middle of other effects (never frames of the orbit itself) and list them in `images`:
 
 ```bash
-cd remotion && npx remotion still Diretor ../trabalho/teste.png --frame=FRAME
+cd remotion && mkdir -p public/thumbnails
+npx remotion still Director public/thumbnails/1.png --frame=FRAME --scale=0.3
 ```
 
-Procure texto cobrindo o rosto, texto cortado na borda e efeito entrando na palavra errada. Corrija o `plano.json` e confira de novo.
+`FRAME` is seconds × 30. Make 6 to 8 thumbnails and set `"images": ["thumbnails/1.png", ...]` on each `orbit`.
 
-## 5. Renderizar
+## 4. Check before rendering it all
+
+Render a few single frames, one in the middle of each effect, and look at the images:
 
 ```bash
-mkdir -p saida && cd remotion && npx remotion render Diretor ../saida/video.mp4 --codec=h264 --crf=18
+cd remotion && npx remotion still Director ../work/check.png --frame=FRAME
 ```
 
-Precisa de internet (as fontes vêm do Google Fonts). Entregue o caminho de `saida/video.mp4` e pergunte o que ajustar. Ajustes de texto, tempo ou troca de efeito são só no `plano.json`, sem rodar o preparo de novo. Mudar a cor ou os cortes exige rodar o `preparar.py` (e o recorte) de novo.
+Look for text covering the face, text cut off at the edge, and effects landing on the wrong word. Fix `plan.json` and check again.
 
-## Privacidade
+## 5. Render
 
-O vídeo da pessoa, a transcrição e o plano ficam só no computador dela: `entrada/`, `saida/`, `trabalho/`, `remotion/public/` e os arquivos em `remotion/src/dados/` (menos o exemplo) estão no `.gitignore`. Nunca faça commit deles.
+```bash
+mkdir -p output && cd remotion && npx remotion render Director ../output/video.mp4 --codec=h264 --crf=18
+```
+
+It needs internet (fonts come from Google Fonts). Give the person the path to `output/video.mp4` and ask what to adjust. Text, timing or effect changes only touch `plan.json`, no need to prepare again. Changing the color or the cuts means running `prepare.py` (and the cutout) again.
+
+## Privacy
+
+The person's video, transcript and plan stay on their computer only: `input/`, `output/`, `work/`, `remotion/public/base.mp4`, `remotion/public/cutout/`, `remotion/public/thumbnails/` and the files in `remotion/src/data/` (except the example) are in `.gitignore`. Never commit them.

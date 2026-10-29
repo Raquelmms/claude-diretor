@@ -1,40 +1,49 @@
 # Claude diretor
 
-Transforma o Claude Code num diretor de vídeo. Você grava um vídeo falando para a câmera, digita `/diretor`, e o Claude:
+Transforma o Claude Code num diretor de vídeo. Você grava um vídeo falando para a câmera, e o Claude:
 
 1. corta as pausas e as tomadas repetidas;
 2. transcreve a sua fala com o tempo de cada palavra;
 3. escolhe um efeito para cada frase, de acordo com o que você disse;
 4. te mostra o plano para você aprovar ou mudar;
-5. entrega o MP4 vertical pronto para Reels, TikTok e Shorts, com legenda palavra por palavra.
+5. entrega o MP4 vertical pronto para Reels, TikTok e Shorts, com legenda palavra por palavra e efeitos sonoros.
 
 Os efeitos são feitos em código com [Remotion](https://www.remotion.dev): letreiro de neon acendendo atrás da sua cabeça, letras gigantes atrás de você, telas girando em 3D, vídeo dentro do texto, widgets de vidro, freeze frame com ranking, curtidas subindo, folha de contato, tela dividida com o Claude, checklist, gráfico de comparação e chamada final.
 
-Cada vídeo pode ter um tema (padrão, neon, limpo, editorial ou retro), que troca as fontes e as cores de todos os efeitos, e um estilo de legenda. Os efeitos sonoros (pop, whoosh, ding, clique, zumbido de neon) entram sozinhos no tempo certo. Eles foram gerados por código neste repositório, então não têm direitos de terceiros.
+Cada vídeo pode ter um tema (padrão, neon, limpo, editorial ou retrô), que troca as fontes e as cores de todos os efeitos, e um estilo de legenda. Os efeitos sonoros (pop, whoosh, ding, clique, zumbido de neon) entram sozinhos no tempo certo. Eles foram gerados por código neste repositório, então não têm direitos de terceiros.
 
 ## O que você precisa
 
-- Um computador (Mac, Linux ou Windows com WSL).
-- [Claude Code](https://claude.com/claude-code) num plano pago do Claude.
-- [ffmpeg](https://ffmpeg.org/download.html), [Node.js](https://nodejs.org) 18 ou mais novo e Python 3.10 ou mais novo.
+- Um computador (Mac, Windows ou Linux). Não funciona no celular.
+- O app do Claude ([claude.com/download](https://claude.com/download)) num plano pago (Pro ou maior). O Claude Code fica na aba **Code** do app.
 - Internet na hora de renderizar (as fontes vêm do Google Fonts).
+
+O Claude instala o resto (ffmpeg, Node.js e Python) na primeira vez, te explicando cada passo.
 
 ## Como usar
 
-1. Baixe este repositório e abra o Claude Code dentro da pasta:
+### Jeito mais fácil: cole o link no Claude
 
-   ```bash
-   git clone https://github.com/Raquelmms/claude-diretor.git
-   cd claude-diretor
-   claude
-   ```
+1. Abra o app do Claude, vá na aba **Code** e escolha uma pasta qualquer.
+2. Cole esta mensagem:
 
-2. Ponha o seu vídeo na pasta `entrada/` (ou só diga ao Claude onde ele está).
-3. Digite `/diretor`. Na primeira vez o Claude instala o que falta, o que leva alguns minutos.
-4. Leia o plano que ele propõe, peça mudanças se quiser, e aprove.
-5. O vídeo sai em `saida/video.mp4`.
+   > Quero usar o diretor de vídeo do github.com/Raquelmms/claude-diretor. Baixe o repositório para uma pasta chamada claude-diretor dentro da minha pasta de usuário (se não tiver git, baixe o ZIP). Depois leia o arquivo .claude/skills/diretor/SKILL.md e siga as instruções dele. Instale o que faltar (ffmpeg, Node.js e Python), me explicando cada passo antes de instalar. Quando terminar, me peça o vídeo.
 
-Para mudar um texto ou trocar um efeito depois, é só pedir ("troca o gráfico por um checklist", "muda o texto do final para SEGUE"). O Claude edita o plano e renderiza de novo.
+3. Quando ele pedir, mande o seu vídeo. Ele mostra o plano dos efeitos, você aprova e o vídeo sai pronto.
+
+**Da próxima vez:** abra a pasta `claude-diretor` na aba Code e digite `/diretor`.
+
+### Pelo terminal
+
+```bash
+git clone https://github.com/Raquelmms/claude-diretor.git
+cd claude-diretor
+claude
+```
+
+Ponha o vídeo na pasta `input/` e digite `/diretor`. O vídeo sai em `output/video.mp4`.
+
+Para mudar um texto ou trocar um efeito depois, é só pedir ("troca o gráfico por um checklist", "muda o texto do final para SEGUE", "usa o tema editorial"). O Claude edita o plano e renderiza de novo.
 
 ## Dicas de gravação
 
@@ -43,9 +52,18 @@ Para mudar um texto ou trocar um efeito depois, é só pedir ("troca o gráfico 
 - Faça meio segundo de pausa entre as frases. É onde o efeito entra.
 - Se errar, pare e repita a frase inteira. O diretor fica só com a última tomada.
 
+## Como o projeto é organizado
+
+| Pasta | O que tem |
+|---|---|
+| `.claude/skills/diretor/` | As instruções que fazem o Claude agir como diretor |
+| `scripts/` | `prepare.py` (cortes, cor e transcrição), `cutout.py` (recorte da pessoa), `generate_sounds.py` (efeitos sonoros) |
+| `remotion/src/effects/` | Os efeitos |
+| `remotion/src/data/plan.example.json` | Exemplo de plano |
+
 ## Privacidade
 
-Tudo roda no seu computador. O seu vídeo, a transcrição e o plano ficam em pastas que o git ignora (`entrada/`, `saida/`, `trabalho/` e os arquivos gerados em `remotion/`), então não vão para nenhum lugar se você publicar um fork.
+Tudo roda no seu computador. O seu vídeo, a transcrição e o plano ficam em pastas que o git ignora (`input/`, `output/`, `work/` e os arquivos gerados em `remotion/`), então não vão para nenhum lugar se você publicar um fork.
 
 ## Licenças
 

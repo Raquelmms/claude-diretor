@@ -1,0 +1,33 @@
+{
+  "theme": "neon",
+  "captionStyle": "neon",
+  "sounds": true,
+  "captions": true,
+  "effects": [
+    {"type": "neon", "start": 0, "end": 2.4, "text": "Claude", "font": "script"},
+    {"type": "text-behind", "start": 2.4, "end": 4.1, "text": "ZERO EDITOR"},
+    {"type": "widgets", "start": 4.1, "end": 6.2, "at": [4.2, 4.7, 5.2, 5.4],
+      "number": {"label": "Claude", "value": 9, "caption": "efeitos · 1 clipe"}, "badge": "Editado pelo Claude"},
+    {"type": "freeze-ranking", "start": 6.26, "end": 7.72, "title": "TOP 3 EFEITOS", "items": ["Freeze frame", "Glass likes", "Folha de contato"]},
+    {"type": "likes", "start": 7.76, "end": 9.26, "count": 12.4, "suffix": " mil",
+      "comments": [{"user": "@alguem", "text": "como você fez isso??"}, {"user": "@outra.pessoa", "text": "preciso disso urgente"}]},
+    {"type": "contact-sheet", "start": 9.3, "end": 10.92, "text": "essa!"},
+    {"type": "split-claude", "start": 10.96, "end": 16.45, "command": "/diretor", "attachAt": 12.06, "typeAt": 13.36, "sendAt": 15.2, "doneAt": 15.8,
+      "working": "Editando seu vídeo…", "done": "Pronto! Seu vídeo está editado."},
+    {"type": "checklist", "start": 16.5, "end": 22.25, "doneAt": 20.78, "title": "Claude está editando…", "doneTitle": "Claude editou seu vídeo",
+      "closing": "PRONTO PRA POSTAR", "items": [
+      {"text": "Cortar as pausas", "tag": "todo frame", "at": 16.72},
+      {"text": "Pôr legenda", "tag": "auto", "at": 18.32},
+      {"text": "Aplicar o efeito", "tag": "IA", "at": 19.46}
+    ]},
+    {"type": "chart", "start": 22.3, "end": 25.33, "title": "Tempo de edição",
+      "before": {"label": "Antes", "value": "2 h", "at": 22.9},
+      "after": {"label": "Agora", "value": "10 min", "at": 24.34, "ratio": 0.083}},
+    {"type": "cta", "start": 25.38, "end": 28.33, "lines": [
+      {"text": "Comenta", "at": 25.38},
+      {"text": "DIRETOR", "at": 25.8},
+      {"text": "e recebe o link", "at": 26.5}
+    ]},
+    {"type": "orbit", "start": 27.33, "end": 28.33}
+  ]
+}

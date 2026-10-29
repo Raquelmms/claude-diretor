@@ -1,20 +1,20 @@
-# Dependências
+# Dependencies
 node_modules/
 .venv/
 
-# Vídeos e arquivos gerados a partir do vídeo de quem usa (nunca sobem)
-entrada/
-saida/
-trabalho/
+# The user's video and everything generated from it (never committed)
+input/
+output/
+work/
 remotion/public/base.mp4
-remotion/public/recorte/
-remotion/public/miniaturas/
-remotion/src/dados/palavras.json
-remotion/src/dados/info.json
-remotion/src/dados/plano.json
+remotion/public/cutout/
+remotion/public/thumbnails/
+remotion/src/data/words.json
+remotion/src/data/info.json
+remotion/src/data/plan.json
 *.mov
 *.MOV
 *.mp4
 *.wav
-# Efeitos sonoros sintetizados por scripts/gerar_sons.py (originais, podem subir)
-!remotion/public/sons/*.wav
+# Sound effects synthesized by scripts/generate_sounds.py (original, safe to commit)
+!remotion/public/sounds/*.wav
